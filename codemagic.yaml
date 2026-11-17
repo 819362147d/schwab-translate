@@ -1,0 +1,61 @@
+# Codemagic 构建配置：schwab-translate / SchwabTranslate（未签名 IPA）
+#
+# 仓库里只需要源码 + 本文件：
+#   SchwabTranslate/           SwiftUI App 源码
+#   SchwabTranslateBroadcast/  ReplayKit 录屏扩展源码
+#   SchwabTranslate.xcodeproj/ Xcode 工程
+#   codemagic.yaml             本文件
+# 构建产物为未签名 IPA，下载后用自己的 Apple ID 自签安装。
+#
+# 注意：本仓库未接 Codemagic webhook，也无 API token；push 不会自动构建，
+# 需在 Codemagic 网页上选 app → Start build → workflow ios-unsigned
+# → branch master 手动触发。
+
+workflows:
+  ios-unsigned:
+    name: iOS unsigned IPA (SchwabTranslate)
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Verify project layout
+        script: |
+          set -e
+          test -f SchwabTranslate.xcodeproj/project.pbxproj
+          test -d SchwabTranslate/Assets.xcassets
+          test -f SchwabTranslate/Info.plist
+          test -f SchwabTranslateBroadcast/Info.plist
+          test -f SchwabTranslateBroadcast/SampleHandler.swift
+          ls SchwabTranslate/*.swift SchwabTranslateBroadcast/*.swift
+          echo "Project layout OK."
+      - name: Archive without code signing
+        script: |
+          set -e
+          xcodebuild \
+            -project SchwabTranslate.xcodeproj \
+            -scheme SchwabTranslate \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath "$CM_BUILD_DIR/build/SchwabTranslate.xcarchive" \
+            archive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO
+      - name: Package unsigned IPA
+        script: |
+          set -e
+          APP_PATH="$CM_BUILD_DIR/build/SchwabTranslate.xcarchive/Products/Applications/SchwabTranslate.app"
+          test -d "$APP_PATH" || { echo "archive .app not found"; exit 1; }
+          test -d "$APP_PATH/PlugIns/SchwabTranslateBroadcast.appex" || { echo "broadcast extension missing"; exit 1; }
+          PKG_DIR="$CM_BUILD_DIR/build/ipa-payload"
+          rm -rf "$PKG_DIR" && mkdir -p "$PKG_DIR/Payload"
+          cp -R "$APP_PATH" "$PKG_DIR/Payload/"
+          cd "$PKG_DIR"
+          zip -qry "$CM_BUILD_DIR/build/schwab-translate_unsigned.ipa" Payload
+          test -f "$CM_BUILD_DIR/build/schwab-translate_unsigned.ipa" || { echo "IPA not created"; exit 1; }
+          ls -lh "$CM_BUILD_DIR/build/schwab-translate_unsigned.ipa"
+          echo "--- SHA-256 ---"
+          shasum -a 256 "$CM_BUILD_DIR/build/schwab-translate_unsigned.ipa"
+    artifacts:
+      - build/schwab-translate_unsigned.ipa
