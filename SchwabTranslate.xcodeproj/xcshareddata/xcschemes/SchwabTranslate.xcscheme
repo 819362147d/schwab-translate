@@ -79,7 +79,7 @@
             BuildableName = "SchwabTranslate.app"
             BlueprintName = "SchwabTranslate"
             ReferencedContainer = "container:SchwabTranslate.xcodeproj">
-         </BuildableProductRunnable>
+         </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
