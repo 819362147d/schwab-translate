@@ -150,6 +150,39 @@ final class TranslationEngine {
         }.resume()
     }
 
+    // MARK: - Box stabilization
+
+    /// Merge new boxes with previous ones: if a new box's center is close to
+    /// an old box's center, keep the old rect (kills jitter / dropped boxes)
+    /// and take the new text. Boxes that moved a lot are treated as new.
+    static func stabilizedBoxes(new: [OcrBox], old: [OcrBox]) -> [OcrBox] {
+        guard !old.isEmpty else { return new }
+        var used = Set<Int>()
+        return new.map { box in
+            let cx = box.x + box.w / 2
+            let cy = box.y + box.h / 2
+            var best: Int?
+            var bestDist = Double.greatestFiniteMagnitude
+            for (i, o) in old.enumerated() where !used.contains(i) {
+                let ocx = o.x + o.w / 2
+                let ocy = o.y + o.h / 2
+                let d = (cx - ocx) * (cx - ocx) + (cy - ocy) * (cy - ocy)
+                if d < bestDist {
+                    bestDist = d
+                    best = i
+                }
+            }
+            if let i = best, bestDist < 0.03 * 0.03 {
+                used.insert(i)
+                var stable = old[i]
+                stable.original = box.original
+                stable.translated = box.translated
+                return stable
+            }
+            return box
+        }
+    }
+
     // MARK: - Image helpers
 
     static func downscaled(_ image: CGImage, maxDimension: CGFloat) -> CGImage? {

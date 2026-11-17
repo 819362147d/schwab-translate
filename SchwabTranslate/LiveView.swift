@@ -6,6 +6,7 @@ struct LiveView: View {
     @State private var payload: OverlayPayload?
     @State private var lastSeen: TimeInterval = 0
     @State private var showOriginal = false
+    @State private var floatingMode = false
     private let timer = Timer.publish(every: 1.0, on: .main, in: .common).autoconnect()
 
     var body: some View {
@@ -49,6 +50,14 @@ struct LiveView: View {
                     .background(Color.secondary.opacity(0.2))
                     .foregroundColor(.primary)
                     .cornerRadius(10)
+                    Button("悬浮窗") {
+                        floatingMode = true
+                    }
+                    .padding(.vertical, 10)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.secondary.opacity(0.2))
+                    .foregroundColor(.primary)
+                    .cornerRadius(10)
                 }
                 .padding(.horizontal)
                 howToCard
@@ -56,6 +65,9 @@ struct LiveView: View {
             .navigationTitle("实时翻译")
             .onAppear(perform: refresh)
             .onReceive(timer) { _ in refresh() }
+            .fullScreenCover(isPresented: $floatingMode) {
+                FloatingOverlayView(showOriginal: $showOriginal)
+            }
         }
     }
 
@@ -63,7 +75,11 @@ struct LiveView: View {
         guard let latest = OverlayBridge.fetchLatest(),
               latest.timestamp != lastSeen else { return }
         lastSeen = latest.timestamp
-        payload = latest
+        var merged = latest
+        if let prev = payload {
+            merged.boxes = TranslationEngine.stabilizedBoxes(new: latest.boxes, old: prev.boxes)
+        }
+        payload = merged
     }
 
     private func statusLine(for payload: OverlayPayload) -> some View {
@@ -125,16 +141,24 @@ struct OverlayImageView: View {
                         .resizable()
                         .frame(width: dw, height: dh)
                     ForEach(Array(payload.boxes.enumerated()), id: \.offset) { _, box in
-                        let fontSize = max(9, box.h * dh * 0.9)
+                        // Expand the rect a little and use a near-opaque chip so the
+                        // original glyphs are fully covered: no double-vision overlap.
+                        let pad: Double = 0.08
+                        let ex = max(0, box.x - box.w * pad)
+                        let ey = max(0, box.y - box.h * pad)
+                        let ew = min(1 - ex, box.w * (1 + pad * 2))
+                        let eh = min(1 - ey, box.h * (1 + pad * 2))
+                        let fontSize = max(9, eh * dh * 0.85)
                         Text(showOriginal ? box.original : box.translated)
                             .font(.system(size: fontSize, weight: .semibold))
                             .foregroundColor(.white)
-                            .padding(2)
-                            .background(Color.black.opacity(0.55))
-                            .cornerRadius(3)
+                            .padding(3)
+                            .background(Color.black.opacity(0.88))
+                            .cornerRadius(4)
+                            .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
                             .position(
-                                x: ox + (box.x + box.w / 2) * dw,
-                                y: oy + (box.y + box.h / 2) * dh
+                                x: ox + (ex + ew / 2) * dw,
+                                y: oy + (ey + eh / 2) * dh
                             )
                     }
                 }
@@ -144,5 +168,62 @@ struct OverlayImageView: View {
             Text("图片解码失败")
                 .foregroundColor(.secondary)
         }
+    }
+}
+
+/// Full-screen floating overlay: just the captured frame + translation chips,
+/// no navigation bar or buttons except floating close / original-translated controls.
+struct FloatingOverlayView: View {
+    @Binding var showOriginal: Bool
+    @Environment(\.dismiss) private var dismiss
+    @State private var payload: OverlayPayload?
+    @State private var lastSeen: TimeInterval = 0
+    private let timer = Timer.publish(every: 1.0, on: .main, in: .common).autoconnect()
+
+    var body: some View {
+        ZStack {
+            Color.black.ignoresSafeArea()
+            if let payload = payload {
+                OverlayImageView(payload: payload, showOriginal: showOriginal)
+            } else {
+                Text("等待录屏帧…")
+                    .foregroundColor(.white.opacity(0.7))
+            }
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 28))
+                            .foregroundColor(.white.opacity(0.85))
+                            .shadow(radius: 3)
+                    }
+                    .padding()
+                }
+                Spacer()
+                Button(showOriginal ? "看译文" : "看原文") {
+                    showOriginal.toggle()
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(Color.white.opacity(0.2))
+                .foregroundColor(.white)
+                .cornerRadius(20)
+                .padding(.bottom, 24)
+            }
+        }
+        .onAppear(perform: refresh)
+        .onReceive(timer) { _ in refresh() }
+    }
+
+    private func refresh() {
+        guard let latest = OverlayBridge.fetchLatest(),
+              latest.timestamp != lastSeen else { return }
+        lastSeen = latest.timestamp
+        var merged = latest
+        if let prev = payload {
+            merged.boxes = TranslationEngine.stabilizedBoxes(new: latest.boxes, old: prev.boxes)
+        }
+        payload = merged
     }
 }

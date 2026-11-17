@@ -72,7 +72,11 @@ struct ScreenshotView: View {
                     DispatchQueue.main.async {
                         self.processing = false
                         if let payload = payload {
-                            self.payload = payload
+                            var merged = payload
+                            if let prev = self.payload {
+                                merged.boxes = TranslationEngine.stabilizedBoxes(new: payload.boxes, old: prev.boxes)
+                            }
+                            self.payload = merged
                         } else {
                             self.notice = "没识别到英文文字，或者翻译接口没连上"
                         }
