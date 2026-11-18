@@ -19,6 +19,10 @@
 		B2000000000000000000000A /* TranslationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000015 /* TranslationEngine.swift */; };
 		B2000000000000000000000B /* OverlayBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000016 /* OverlayBridge.swift */; };
 		B2000000000000000000000C /* SchwabTranslateBroadcast.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = B2000000000000000000001D /* SchwabTranslateBroadcast.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B2000000000000000000000D /* PiPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000000000000000000001E /* PiPServer.swift */; };
+		B2000000000000000000000E /* PiPCardRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000000000000000000001F /* PiPCardRenderer.swift */; };
+		B2000000000000000000000F /* PiPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000020 /* PiPManager.swift */; };
+		B20000000000000000000010 /* PiPView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000021 /* PiPView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +63,10 @@
 		B2000000000000000000001B /* SampleHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
 		B2000000000000000000001C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B2000000000000000000001D /* SchwabTranslateBroadcast.appex */ = {isa = PBXFileReference; explicitFileType = wrapper.app-extension; includeInIndex = 0; path = SchwabTranslateBroadcast.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2000000000000000000001E /* PiPServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPServer.swift; sourceTree = "<group>"; };
+		B2000000000000000000001F /* PiPCardRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPCardRenderer.swift; sourceTree = "<group>"; };
+		B20000000000000000000020 /* PiPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPManager.swift; sourceTree = "<group>"; };
+		B20000000000000000000021 /* PiPView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +106,10 @@
 				B20000000000000000000015 /* TranslationEngine.swift */,
 				B20000000000000000000016 /* OverlayBridge.swift */,
 				B20000000000000000000017 /* HelpView.swift */,
+				B2000000000000000000001E /* PiPServer.swift */,
+				B2000000000000000000001F /* PiPCardRenderer.swift */,
+				B20000000000000000000020 /* PiPManager.swift */,
+				B20000000000000000000021 /* PiPView.swift */,
 				B20000000000000000000018 /* Assets.xcassets */,
 				B20000000000000000000019 /* Info.plist */,
 			);
@@ -228,6 +240,10 @@
 				B20000000000000000000005 /* TranslationEngine.swift in Sources */,
 				B20000000000000000000006 /* OverlayBridge.swift in Sources */,
 				B20000000000000000000007 /* HelpView.swift in Sources */,
+				B2000000000000000000000D /* PiPServer.swift in Sources */,
+				B2000000000000000000000E /* PiPCardRenderer.swift in Sources */,
+				B2000000000000000000000F /* PiPManager.swift in Sources */,
+				B20000000000000000000010 /* PiPView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,7 +302,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -306,7 +322,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFS = "";
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -351,7 +367,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -365,7 +381,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFS = "";
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -382,7 +398,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = SchwabTranslate/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -395,7 +411,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kn.schwabtranslate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMBED_LIBRARIES_WITH_INSTALL = YES;
@@ -410,7 +426,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = SchwabTranslate/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -423,7 +439,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kn.schwabtranslate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMBED_LIBRARIES_WITH_INSTALL = YES;
@@ -436,7 +452,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = SchwabTranslateBroadcast/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -445,7 +461,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kn.schwabtranslate.broadcast;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -459,7 +475,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = SchwabTranslateBroadcast/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -468,7 +484,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kn.schwabtranslate.broadcast;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

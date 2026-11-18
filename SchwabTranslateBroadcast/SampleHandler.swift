@@ -50,6 +50,7 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 self.lastPayload = payload
                 self.emptyStreak = 0
                 OverlayBridge.publish(payload: payload)
+                self.postToApp(payload: payload)
             } else if let last = self.lastPayload, self.emptyStreak < 2 {
                 // One or two bad frames in a row: keep the boxes alive
                 // instead of letting them drop.
@@ -57,8 +58,23 @@ final class SampleHandler: RPBroadcastSampleHandler {
                 var keepAlive = last
                 keepAlive.timestamp = Date().timeIntervalSince1970
                 OverlayBridge.publish(payload: keepAlive)
+                self.postToApp(payload: keepAlive)
             }
             self.processing = false
         }
+    }
+
+    /// Push the payload to the app's loopback HTTP server for the PiP
+    /// window. Fire-and-forget: if the app isn't running its server yet,
+    /// the pasteboard bridge still carries the frame.
+    private func postToApp(payload: OverlayPayload) {
+        guard let data = try? JSONEncoder().encode(payload),
+              let url = URL(string: "http://127.0.0.1:8765/frame") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = data
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.timeoutInterval = 2
+        URLSession.shared.dataTask(with: request).resume()
     }
 }
