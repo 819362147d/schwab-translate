@@ -22,7 +22,7 @@
 		B2000000000000000000000D /* PiPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000000000000000000001E /* PiPServer.swift */; };
 		B2000000000000000000000E /* PiPCardRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2000000000000000000001F /* PiPCardRenderer.swift */; };
 		B2000000000000000000000F /* PiPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000020 /* PiPManager.swift */; };
-		B20000000000000000000010 /* PiPView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000021 /* PiPView.swift */; };
+		B20000000000000000000010 /* PiPView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000025 /* PiPView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,7 +66,7 @@
 		B2000000000000000000001E /* PiPServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPServer.swift; sourceTree = "<group>"; };
 		B2000000000000000000001F /* PiPCardRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPCardRenderer.swift; sourceTree = "<group>"; };
 		B20000000000000000000020 /* PiPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPManager.swift; sourceTree = "<group>"; };
-		B20000000000000000000021 /* PiPView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPView.swift; sourceTree = "<group>"; };
+		B20000000000000000000025 /* PiPView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,7 +109,7 @@
 				B2000000000000000000001E /* PiPServer.swift */,
 				B2000000000000000000001F /* PiPCardRenderer.swift */,
 				B20000000000000000000020 /* PiPManager.swift */,
-				B20000000000000000000021 /* PiPView.swift */,
+				B20000000000000000000025 /* PiPView.swift */,
 				B20000000000000000000018 /* Assets.xcassets */,
 				B20000000000000000000019 /* Info.plist */,
 			);
