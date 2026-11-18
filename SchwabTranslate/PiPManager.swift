@@ -66,7 +66,7 @@ final class PiPManager: NSObject, ObservableObject {
         startFallbackTimer()
 
         guard let layer = displayLayer else { return }
-        let source = AVPictureInPictureControllerContentSource(sampleBufferDisplayLayer: layer, playbackDelegate: self)
+        let source = AVPictureInPictureController.ContentSource(sampleBufferDisplayLayer: layer, playbackDelegate: self)
         let controller = AVPictureInPictureController(contentSource: source)
         controller.delegate = self
         controller.canStartPictureInPictureAutomaticallyFromInline = true
@@ -93,7 +93,7 @@ final class PiPManager: NSObject, ObservableObject {
         layer.bounds = CGRect(x: 0, y: 0, width: PiPCardRenderer.cardWidth, height: PiPCardRenderer.cardHeight)
         layer.videoGravity = .resizeAspect
         var timebase: CMTimebase?
-        CMTimebaseCreateWithMasterClock(allocator: kCFAllocatorDefault, masterClock: CMClockGetHostTimeClock(), timebaseOut: &timebase)
+        CMTimebaseCreateWithSourceClock(allocator: kCFAllocatorDefault, sourceClock: CMClockGetHostTimeClock(), timebaseOut: &timebase)
         if let timebase = timebase {
             CMTimebaseSetRate(timebase, rate: 1.0)
             layer.controlTimebase = timebase
@@ -161,7 +161,7 @@ extension PiPManager: AVPictureInPictureSampleBufferPlaybackDelegate {
     func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, didTransitionToRenderSize newRenderSize: CMVideoDimensions) {
     }
 
-    func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, skipByInterval skipInterval: CMTime, completion completionHandler: @escaping (Bool) -> Void) {
+    func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, skipByInterval skipInterval: CMTime, completionHandler: @escaping (Bool) -> Void) {
         completionHandler(false)
     }
 }
